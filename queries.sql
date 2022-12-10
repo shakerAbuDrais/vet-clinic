@@ -98,3 +98,56 @@ SELECT * from animals JOIN owners ON animals.owner_id = owners.id WHERE owners.f
 -- step 7
 -- Who owns the most animals?
 SELECT owners.full_name, COUNT(animals.owner_id) from animals JOIN owners ON animals.owner_id = owners.id GROUP BY owners.full_name ORDER BY COUNT(animals.owner_id) DESC LIMIT 1;
+
+/*Project Four*/
+
+SELECT name FROM animals
+WHERE id = (SELECT animal_id FROM visits
+WHERE vet_id = (SELECT id FROM vets WHERE name = 'William Tatcher')
+ORDER BY visit_date DESC LIMIT 1);
+
+SELECT COUNT(DISTINCT animal_id) FROM visits
+WHERE vet_id = (SELECT id FROM vets WHERE name = 'Stephanie Mendez');
+
+SELECT v.name, s.name FROM vets v
+LEFT JOIN specializations sp ON sp.vet_id = v.id
+LEFT JOIN species s ON sp.species_id = s.id;
+
+SELECT name FROM animals
+WHERE id IN (SELECT animal_id FROM visits
+WHERE vet_id = (SELECT id FROM vets WHERE name = 'Stephanie Mendez')
+AND visit_date BETWEEN '2020-04-01' AND '2020-08-30');
+
+SELECT name, COUNT(animal_id) FROM animals
+JOIN visits ON visits.animal_id = animals.id
+GROUP BY name
+ORDER BY COUNT(animal_id) DESC
+LIMIT 1;
+
+SELECT name FROM animals
+WHERE id = (SELECT animal_id FROM visits
+WHERE vet_id = (SELECT id FROM vets WHERE name = 'Maisy Smith')
+ORDER BY visit_date ASC LIMIT 1);
+
+/* Query 7*/
+
+SELECT a.name, v.name, visit_date FROM visits
+JOIN animals a ON a.id = visits.animal_id
+JOIN vets v ON v.id = visits.vet_id
+ORDER BY visit_date DESC LIMIT 1;
+
+/* Query 8*/
+
+SELECT COUNT(*) FROM visits
+WHERE vet_id NOT IN (SELECT vet_id FROM specializations
+WHERE species_id = (SELECT species_id FROM animals
+WHERE id = visits.animal_id));
+
+/* Query 9*/
+
+SELECT name FROM species
+WHERE id = (SELECT species_id FROM visits
+JOIN animals ON animals.id = visits.animal_id
+WHERE vet_id = (SELECT id FROM vets WHERE name = 'Maisy Smith')
+GROUP BY species_id
+ORDER BY COUNT(species_id) DESC LIMIT 1);

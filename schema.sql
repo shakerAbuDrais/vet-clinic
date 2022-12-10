@@ -30,3 +30,23 @@ CREATE TABLE species (
 ALTER TABLE animals DROP COLUMN species;
 ALTER TABLE animals ADD COLUMN species_id INTEGER;
 ALTER TABLE animals ADD COLUMN owner_id INTEGER;
+
+/* Project Four - 1 */
+
+CREATE TABLE vets (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  age INTEGER,
+  date_of_graduation DATE
+);
+
+/* step 2 */
+
+CREATE TABLE specializations (
+  id SERIAL PRIMARY KEY,
+  species_id INTEGER NOT NULL,
+  vet_id INTEGER NOT NULL,
+  FOREIGN KEY (species_id) REFERENCES species(id),
+  FOREIGN KEY (vet_id) REFERENCES vets(id)
+);
+
